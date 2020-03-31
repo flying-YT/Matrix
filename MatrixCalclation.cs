@@ -44,7 +44,7 @@ namespace Matrix
                         }
                     }
                 }
-                // ここから処理開始
+                // start process
                 int column = 0;
                 for (int v = 0; v < xi.GetLength(0); v++)
                 {
@@ -86,7 +86,7 @@ namespace Matrix
                         v--;
                     }
                 }
-                // 処理終了、戻り値を作成
+                // finish process and make return value
                 for (int v=0;v<x.GetLength(0);v++)
                 {
                     for(int w=0;w<x.GetLength(1);w++)
