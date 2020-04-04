@@ -3,6 +3,73 @@ namespace Matrix
 {
     public static class MatrixCalclation
     {
+        public static double Det( double[,] x )
+        {
+            double returnvalue = 0;
+            if ( x.GetLength(0) == x.GetLength(1) )
+            {
+                double[,] l = new double[x.GetLength(0), x.GetLength(1)];
+                double[,] u = new double[x.GetLength(0), x.GetLength(1)];
+                for (int i=0;i<x.GetLength(0);i++)
+                {
+                    l[i, i] = 1;
+                    u[0, i] = x[0, i];
+                }
+                double n = 0;
+                int count = 1;
+                int line = 1;
+                int column = 1;
+                while( count <= (x.GetLength(0)-1)*2)
+                {
+                    if (count%2 != 0)
+                    {
+                        for (int i=line;i<x.GetLength(0);i++)
+                        {
+                            for (int w = 0; w < x.GetLength(1); w++)
+                            {
+                                if( w != (line-1))
+                                {
+                                    n += l[i, w] * u[w, line-1];
+                                }
+                            }
+                            l[i, column - 1] = (x[i, column - 1] - n) / u[line - 1, column - 1];
+                            n = 0;
+                        }
+                        column++;
+                    }
+                    else
+                    {
+                        for(int i=(column-1);i<x.GetLength(1);i++)
+                        {
+                            for(int w=0;w<x.GetLength(0);w++)
+                            {
+                                if (w != (column-1))
+                                {
+                                    n += l[column-1, w] * u[w, i];
+                                }
+                            }
+                            u[line, i] = (x[line, i] - n) / l[line, column-1];
+                            n = 0;
+                        }
+                        line++;
+                    }
+                    count++;
+                }
+                double detU = 1;
+                for (int i=0;i<x.GetLength(0);i++)
+                {
+                    detU = detU * u[i, i];
+                }
+                double detL = 1;
+                returnvalue = detL * detU;
+            }
+            else
+            {
+                Console.WriteLine("It's not Square matrix.");
+            }
+            return returnvalue;
+        }
+
         public static double[,] IdentityMatrix(int n)
         {
             double[,] e = new double[n, n];
@@ -105,12 +172,13 @@ namespace Matrix
 
         public static void MatrixPrint(double[,] x)
         {
+            int n = MaxDigit(x);
             Console.WriteLine("[");
             for (int i = 0; i < x.GetLength(0); i++)
             {
                 for (int w = 0; w < x.GetLength(1); w++)
                 {
-                    Console.Write( " {0,5} ", x[i, w] );
+                    Console.Write( " {0," + n + "} ", x[i, w] );
                 }
                 Console.WriteLine( "" );
             }
@@ -159,5 +227,21 @@ namespace Matrix
             }
             return x;
          }
+
+        private static int MaxDigit( double[,] x )
+        {
+            int max = 0;
+            for(int i=0;i<x.GetLength(0);i++)
+            {
+                for(int w=0;w<x.GetLength(1);w++)
+                {
+                    if(max < x[i, w].ToString().Length)
+                    {
+                        max = x[i, w].ToString().Length;
+                    }
+                }
+            }
+            return max;
+        }
     }
 }
