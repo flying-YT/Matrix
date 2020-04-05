@@ -1,6 +1,6 @@
 # Matrix
 
-"MatrixCalcLation" is Calclation with C#.
+"MatrixCalucLation" is Calculation with C#.
 
 #Author
 
