@@ -1,7 +1,7 @@
 ﻿using System;
 namespace Matrix
 {
-    public static class MatrixCalclation
+    public class MatrixCalculation
     {
         public static double Det( double[,] x )
         {
@@ -54,8 +54,8 @@ namespace Matrix
                     }
                     count++;
                 }
-                MatrixPrint(l);
-                MatrixPrint(u);
+//                MatrixPrint(l);
+//                MatrixPrint(u);
                 double detU = 1;
                 for (int i=0;i<x.GetLength(0);i++)
                 {
@@ -95,74 +95,82 @@ namespace Matrix
         {
             if( x.GetLength(0) == x.GetLength(1) )
             {
-                double[,] returnMatrix = new double[x.GetLength(0), x.GetLength(1)];
-                double[,] xi = new double[x.GetLength(0), x.GetLength(1) * 2];
-                double[,] i = IdentityMatrix(x.GetLength(0));
-                for (int v = 0; v < xi.GetLength(0); v++)
+                if (Det(x) != 0)
                 {
-                    for (int w = 0; w < xi.GetLength(1); w++)
+                    double[,] returnMatrix = new double[x.GetLength(0), x.GetLength(1)];
+                    double[,] xi = new double[x.GetLength(0), x.GetLength(1) * 2];
+                    double[,] i = IdentityMatrix(x.GetLength(0));
+                    for (int v = 0; v < xi.GetLength(0); v++)
                     {
-                        if (w < x.GetLength(1))
+                        for (int w = 0; w < xi.GetLength(1); w++)
                         {
-                            xi[v, w] = x[v, w];
+                            if (w < x.GetLength(1))
+                            {
+                                xi[v, w] = x[v, w];
+                            }
+                            else
+                            {
+                                xi[v, w] = i[v, (w - x.GetLength(1))];
+                            }
+                        }
+                    }
+                    // start process
+                    int column = 0;
+                    for (int v = 0; v < xi.GetLength(0); v++)
+                    {
+                        if (xi[v, column] != 0)
+                        {
+                            double y = xi[v, column];
+                            for (int w = 0; w < xi.GetLength(1); w++)
+                            {
+                                xi[v, w] = xi[v, w] / y;
+                            }
+                            for (int w = 0; w < xi.GetLength(0); w++)
+                            {
+                                y = xi[w, column];
+                                for (int n = 0; n < xi.GetLength(1); n++)
+                                {
+                                    if (v != w)
+                                    {
+                                        xi[w, n] -= (xi[v, n] * y);
+                                    }
+                                }
+                            }
+                            column++;
                         }
                         else
                         {
-                            xi[v, w] = i[v, (w - x.GetLength(1))];
-                        }
-                    }
-                }
-                // start process
-                int column = 0;
-                for (int v = 0; v < xi.GetLength(0); v++)
-                {
-                    if (xi[v, column] != 0)
-                    {
-                        double y = xi[v, column];
-                        for (int w = 0; w < xi.GetLength(1); w++)
-                        {
-                            xi[v, w] = xi[v, w] / y;
-                        }
-                        for (int w=0;w<xi.GetLength(0);w++)
-                        {
-                            y = xi[w, column];
-                            for (int n=0;n<xi.GetLength(1);n++)
+                            for (int w = v + 1; w < xi.GetLength(0); w++)
                             {
-                                if(v != w)
+                                if (xi[w, column] != 0)
                                 {
-                                    xi[w, n] -= (xi[v, n] * y);
+                                    double z = 0;
+                                    for (int n = 0; n < xi.GetLength(1); n++)
+                                    {
+                                        z = xi[v, n];
+                                        xi[v, n] = xi[w, n];
+                                        xi[w, n] = z;
+                                    }
                                 }
                             }
+                            v--;
                         }
-                        column++;
                     }
-                    else
+                    // finish process and make return value
+                    for (int v = 0; v < x.GetLength(0); v++)
                     {
-                        for(int w = v+1;w<xi.GetLength(0);w++)
+                        for (int w = 0; w < x.GetLength(1); w++)
                         {
-                            if (xi[w, column] != 0)
-                            {
-                                double z = 0;
-                                for (int n=0;n<xi.GetLength(1);n++)
-                                {
-                                    z = xi[v, n];
-                                    xi[v, n] = xi[w, n];
-                                    xi[w, n] = z;
-                                }
-                            }
+                            returnMatrix[v, w] = xi[v, w + x.GetLength(1)];
                         }
-                        v--;
                     }
+                    return returnMatrix;
                 }
-                // finish process and make return value
-                for (int v=0;v<x.GetLength(0);v++)
+                else
                 {
-                    for(int w=0;w<x.GetLength(1);w++)
-                    {
-                        returnMatrix[v, w] = xi[v, w+x.GetLength(1)];
-                    }
+                    Console.WriteLine("Inverse matrix does not exist.");
+                    return x;
                 }
-                return returnMatrix;
             }
             else
             {
