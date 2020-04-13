@@ -169,29 +169,36 @@ namespace Matrix
                 else
                 {
                     Console.WriteLine("Inverse matrix does not exist.");
-                    return x;
+                    return null;
                 }
             }
             else
             {
                 Console.WriteLine("It's not Square matrix.");
-                return x;
+                return null;
             }
         }
 
         public static void MatrixPrint(double[,] x)
         {
-            int n = MaxDigit(x);
-            Console.WriteLine("[");
-            for (int i = 0; i < x.GetLength(0); i++)
+            if(x != null)
             {
-                for (int w = 0; w < x.GetLength(1); w++)
+                int n = MaxDigit(x);
+                Console.WriteLine("[");
+                for (int i = 0; i < x.GetLength(0); i++)
                 {
-                    Console.Write( " {0," + n + "} ", x[i, w] );
+                    for (int w = 0; w < x.GetLength(1); w++)
+                    {
+                        Console.Write(" {0," + n + "} ", x[i, w]);
+                    }
+                    Console.WriteLine("");
                 }
-                Console.WriteLine( "" );
+                Console.WriteLine("]");
             }
-            Console.WriteLine( "]" );
+            else
+            {
+                Console.WriteLine("Matrix is null.");
+            }
         }
 
        　public static double[,] MatrixProduct( double[,] x, double[,] y )
@@ -214,7 +221,7 @@ namespace Matrix
             else
             {
                 Console.WriteLine( "Matrix type mismatch." );
-                return x;
+                return null;
             }
          }
 
@@ -229,13 +236,14 @@ namespace Matrix
                         x[i, w] = x[i, w] + y[i, w];
                     }
                 }
+                return x;
             }
             else
             {
                 Console.WriteLine( "Matrix type mismatch." );
+                return null;
             }
-            return x;
-         }
+        }
 
         private static int MaxDigit( double[,] x )
         {
@@ -273,7 +281,7 @@ namespace Matrix
             else
             {
                 Console.WriteLine( "type mismatch" );
-                return y;
+                return null;
             }
         }
     }
