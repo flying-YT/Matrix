@@ -15,7 +15,7 @@ namespace Matrix
             while (finishCheck)
             {
                 Console.WriteLine("");
-                Console.WriteLine("Plase command or \"exit\"");
+                Console.WriteLine("Please command or \"exit\"");
                 string str = Console.ReadLine();
                 if (str == "exit")
                 {
@@ -46,6 +46,39 @@ namespace Matrix
                         catch
                         {
                             Console.WriteLine("Please write matrix name. A or B or C.");
+                        }
+                    }
+                    else if(readStr[0] == "Det")
+                    {
+                        Console.WriteLine(MatrixCalculation.Det(ReturnMatrix(readStr[1])));
+                    }
+                    else if(readStr[0] == "Inverse")
+                    {
+                        try
+                        {
+                            try
+                            {
+                                if (readStr[2] == "A")
+                                {
+                                    matrix1 = MatrixCalculation.MatrixInverse(ReturnMatrix(readStr[1]));
+                                }
+                                else if (readStr[2] == "B")
+                                {
+                                    matrix2 = MatrixCalculation.MatrixInverse(ReturnMatrix(readStr[1]));
+                                }
+                                else if (readStr[2] == "C")
+                                {
+                                    matrix3 = MatrixCalculation.MatrixInverse(ReturnMatrix(readStr[1]));
+                                }
+                            }
+                            catch
+                            {
+                                MatrixCalculation.MatrixPrint(MatrixCalculation.MatrixInverse(ReturnMatrix(readStr[1])));
+                            }
+                        }
+                        catch
+                        {
+                            Console.WriteLine("Not enough arguments.");
                         }
                     }
                     else if (readStr[0] == "Print")
