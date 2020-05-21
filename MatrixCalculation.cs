@@ -225,18 +225,40 @@ namespace Matrix
             }
          }
 
-         public static double[,] MatrixSum( double[,] x, double[,] y )
-         {
+        public static double[,] MatrixSubtraction( double[,] x, double[,] y )
+        {
             if( x.GetLength(0) == y.GetLength(0) && x.GetLength(1) == y.GetLength(1) )
             {
+                double[,] z = new double[x.GetLength(0), x.GetLength(1)];
+                for (int i = 0; i < x.GetLength(0); i++)
+                {
+                    for (int w = 0; w < x.GetLength(1); w++)
+                    {
+                        z[i, w] = x[i, w] - y[i, w];
+                    }
+                }
+                return z;
+            }
+            else
+            {
+                Console.WriteLine("Matrix type mismatch.");
+                return null;
+            }
+        }
+
+        public static double[,] MatrixSum( double[,] x, double[,] y )
+        {
+            if( x.GetLength(0) == y.GetLength(0) && x.GetLength(1) == y.GetLength(1) )
+            {
+                double[,] z = new double[x.GetLength(0), x.GetLength(1)];
                 for (int i=0;i<x.GetLength(0);i++)
                 {
                     for (int w=0;w<x.GetLength(1);w++)
                     {
-                        x[i, w] = x[i, w] + y[i, w];
+                        z[i, w] = x[i, w] + y[i, w];
                     }
                 }
-                return x;
+                return z;
             }
             else
             {
